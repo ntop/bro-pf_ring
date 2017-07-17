@@ -1,0 +1,22 @@
+#!/bin/sh
+#
+
+plugin_usage() {
+    cat <<EOF
+    --with-pfring=DIR          Path to pf_ring installation
+EOF
+}
+
+plugin_option() {
+
+    case "$1" in
+        --with-pfring=*)
+            append_cache_entry PF_RING_ROOT_DIR PATH $optarg
+            return 0
+            ;;
+
+        *)
+            return 1;
+            ;;
+    esac
+}

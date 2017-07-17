@@ -1,0 +1,3 @@
+Bro::PF_RING - Packet acquisition via PF_RING (dynamic, version 1.0)
+    [Packet Source] PF_RINGReader (interface prefix "pf_ring"; supports live input)
+
