@@ -37,6 +37,14 @@ void PF_RINGSource::Open()
 		return;
 		}
 
+	if ( pfring_set_application_name(pd, "bro") != 0 )
+		{
+		Error(errno ? strerror(errno) : "unable to set name");
+		pfring_close(pd);
+		pd = NULL;
+		return;
+		}
+
 	if ( pfring_set_socket_mode(pd, recv_only_mode) != 0 )
 		{
 		Error(errno ? strerror(errno) : "unable to set socket mode");
