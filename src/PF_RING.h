@@ -5,6 +5,7 @@
 
 extern "C" {
 #include <stdio.h>
+#include <pfring.h>
 }
 
 #include "iosource/PktSrc.h"

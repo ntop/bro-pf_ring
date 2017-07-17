@@ -1,7 +1,6 @@
 #include "bro-config.h"
 
 #include "PF_RING.h"
-#include "pf_ring.bif.h"
 
 using namespace iosource::pktsrc;
 
@@ -54,11 +53,10 @@ void PF_RINGSource::Open()
 		return;
 		}
 
-	props.netmask = 0xffffff00;
+	props.netmask = NETMASK_UNKNOWN;
 	props.selectable_fd = pfring_get_selectable_fd(pd);
 	props.is_live = true;
 	props.link_type = DLT_EN10MB;
-	props.hdr_size = GetLinkHeaderSize(props.link_type);
 
 	num_discarded = 0;
 
@@ -96,17 +94,19 @@ bool PF_RINGSource::ExtractNextPacket(Packet* pkt)
 		current_hdr.caplen = ph.caplen;
 		current_hdr.len = ph.len;
 
-		pkt->ts = current_hdr.ts.tv_sec + double(current_hdr.ts.tv_usec) / 1e6;
-		pkt->hdr = &current_hdr;
-		pkt->data = data;
-
-		if ( ApplyBPFFilter(current_filter, &current_hdr, data) )
-			break;
-
-		++num_discarded;
+		if ( ! ApplyBPFFilter(current_filter, &current_hdr, data) ) 
+			{
+			++num_discarded;
+			continue;
+			}
+		else
+			{
+			pkt->Init(props.link_type, &current_hdr.ts, current_hdr.caplen, current_hdr.len, data);
+			return true;
+			}
 		}
 
-	return true;
+	return false;
 	}
 
 void PF_RINGSource::DoneWithPacket()

@@ -14,9 +14,9 @@
 #  PF_RING_INCLUDE_DIR       The pf_ring include directory.
 #  PF_RING_LIBRARY           The libpfring library
 
-find_path(PF_RING_ROOT_DIR
-    NAMES include/pfring.h
-)
+#find_path(PF_RING_ROOT_DIR
+#    NAMES include/pfring.h
+#)
 
 find_path(PF_RING_INCLUDE_DIR
     NAMES pfring.h
