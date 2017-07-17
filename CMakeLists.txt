@@ -11,7 +11,7 @@ if ( PF_RING_FOUND )
     bro_plugin_cc(src/PF_RING.cc)
     # bro_plugin_bif(src/pf_ring.bif)
     bro_plugin_link_library(${PF_RING_LIBRARY})
-    bro_plugin_dist_files(README VERSION)
+    bro_plugin_dist_files(README.md VERSION)
     bro_plugin_end()
 
     file(STRINGS "${CMAKE_CURRENT_SOURCE_DIR}/VERSION" VERSION LIMIT_COUNT 1)
