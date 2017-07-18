@@ -24,6 +24,7 @@ void PF_RINGSource::Open()
 	{
 	int flags = 0;
 	std::string iface = props.path;
+	char *app_name = (char *) "bro";
 
 	flags |= PF_RING_PROMISC;
 	flags |= PF_RING_TIMESTAMP; /* forcing timestamping (sw if hw ts is not available) */
@@ -37,7 +38,7 @@ void PF_RINGSource::Open()
 		return;
 		}
 
-	if ( pfring_set_application_name(pd, "bro") != 0 )
+	if ( pfring_set_application_name(pd, app_name) != 0 )
 		{
 		Error(errno ? strerror(errno) : "unable to set name");
 		pfring_close(pd);
