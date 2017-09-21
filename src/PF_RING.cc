@@ -1,6 +1,23 @@
 #include "bro-config.h"
+#include "stdlib.h"
 
 #include "PF_RING.h"
+
+cluster_type get_cluster_type()
+	{
+	if (getenv("PCAP_PF_RING_USE_CLUSTER_PER_FLOW"))
+		return cluster_per_flow;
+	else if (getenv("PCAP_PF_RING_USE_CLUSTER_PER_FLOW_2_TUPLE"))
+		return cluster_per_flow_2_tuple;
+	else if (getenv("PCAP_PF_RING_USE_CLUSTER_PER_FLOW_4_TUPLE"))
+		return cluster_per_flow_4_tuple;
+	else if (getenv("PCAP_PF_RING_USE_CLUSTER_PER_FLOW_TCP_5_TUPLE"))
+		return cluster_per_flow_tcp_5_tuple;
+	else if (getenv("PCAP_PF_RING_USE_CLUSTER_PER_FLOW_5_TUPLE"))
+		return cluster_per_flow_5_tuple;
+	else
+		return cluster_per_flow_4_tuple; //Round robin never makes sense for bro
+	}
 
 using namespace iosource::pktsrc;
 
@@ -60,6 +77,19 @@ void PF_RINGSource::Open()
 		pfring_close(pd);
 		pd = NULL;
 		return;
+		}
+
+	char *cluster_id = getenv("PCAP_PF_RING_CLUSTER_ID");
+	if ( cluster_id )
+		{
+		cluster_type cluster_mode = get_cluster_type();
+		if ( pfring_set_cluster(pd, atoi(cluster_id), cluster_mode) )
+			{
+			Error(errno ? strerror(errno) : "unable to set cluster");
+			pfring_close(pd);
+			pd = NULL;
+			return;
+			}
 		}
 
 	props.netmask = NETMASK_UNKNOWN;
