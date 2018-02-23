@@ -74,6 +74,10 @@ class LBPFRing(BroControl.plugin.Plugin):
                 nn.env_vars.setdefault("PCAP_PF_RING_DNA_RSS", "1")
                 nn.interface = "%s@%d" % (nn.interface, app_instance)
 
+            elif nn.interface.startswith("pf_ring::dag:"):
+                # For the case where a user is running dag HLB
+                nn.interface = "%s@%d" % (nn.interface, app_instance*2)
+
             else:
                 nn.env_vars.setdefault("PCAP_PF_RING_CLUSTER_ID", dd[nn.host][nn.interface])
 
