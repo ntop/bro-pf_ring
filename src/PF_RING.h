@@ -6,6 +6,7 @@
 extern "C" {
 #include <stdio.h>
 #include <pfring.h>
+#include <pcap.h>
 }
 
 #include "iosource/PktSrc.h"

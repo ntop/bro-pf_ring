@@ -1,4 +1,4 @@
-#include "bro-config.h"
+#include "zeek-config.h"
 #include "stdlib.h"
 
 #include "PF_RING.h"
