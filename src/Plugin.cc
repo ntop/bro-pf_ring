@@ -1,5 +1,6 @@
 #include "Plugin.h"
 #include "PF_RING.h"
+#include "iosource/Component.h"
 
 namespace plugin { namespace Bro_PF_RING { Plugin plugin; } }
 
